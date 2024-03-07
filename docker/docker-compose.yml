@@ -1,0 +1,39 @@
+services:
+
+  #=== POSTGRES ===#
+  leetcode-postgresql-dev:
+    image: postgres:10.4
+    container_name: leetcode-postgresql-dev
+    hostname: leetcode-postgresql
+    networks:
+      - leetcode-dev
+    ports:
+      - 15432:5432/tcp
+    environment:
+      - POSTGRES_USER=leetcode
+    volumes:
+      - leetcode_psql_data:/var/lib/postgresql/data
+
+  #=== PGADMIN ===#
+  pgadmin-app:
+    container_name: pgadmin-app
+    image: dpage/pgadmin4
+    networks:
+      - leetcode-dev
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - leetcode_pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  leetcode_psql_data:
+    external: true
+  leetcode_pgadmin_data:
+    external: true
+
+networks:
+  leetcode-dev:
+    name: leetcode-dev
